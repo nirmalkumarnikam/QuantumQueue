@@ -13,3 +13,4 @@ learned about parser and file input techniques.
 
 Day 2: 
 worked on parsing... now i can read data using parsing algorithms
+
