@@ -1,7 +1,12 @@
 #include <bits/stdc++.h>
 #include "parser.h"
 using namespace std;
+#define all(v) v.begin(), v.end()
 
+
+
+const string TRACE = "trace";
+const string SHOW_STATISTICS = "stats";
 
 void clear_timeline()
 {
