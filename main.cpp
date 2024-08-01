@@ -3,10 +3,33 @@
 using namespace std;
 #define all(v) v.begin(), v.end()
 
+const string ALGORITHMS[9] = {"", "FCFS", "RR-", "SPN", "SRT", "HRRN", "FB-1", "FB-2i", "AGING"};
+
 
 
 const string TRACE = "trace";
 const string SHOW_STATISTICS = "stats";
+
+
+
+string getProcessName(tuple<string, int, int> &a)
+{
+    return get<0>(a);
+}
+int getArrivalTime(tuple<string, int, int> &a)
+{
+    return get<1>(a);
+}
+int getServiceTime(tuple<string, int, int> &a)
+{
+    return get<2>(a);
+}
+int getPriorityLevel(tuple<string, int, int> &a)
+{
+    return get<2>(a);
+}
+
+
 
 void clear_timeline()
 {
@@ -34,22 +57,7 @@ bool byPriorityLevel (const tuple<int,int,int>&a,const tuple<int,int,int>&b){
 }
 
 
-string getProcessName(tuple<string, int, int> &a)
-{
-    return get<0>(a);
-}
-int getArrivalTime(tuple<string, int, int> &a)
-{
-    return get<1>(a);
-}
-int getServiceTime(tuple<string, int, int> &a)
-{
-    return get<2>(a);
-}
-int getPriorityLevel(tuple<string, int, int> &a)
-{
-    return get<2>(a);
-}
+
 
 
 void firstComeFirstServe()
@@ -228,9 +236,96 @@ void printTimeline(int algorithm_index)
     cout << "------------------------------------------------\n";
 }
 
+
+
+
+
+
+void printAlgorithm(int algorithm_index)
+{
+    int algorithm_id = algorithms[algorithm_index].first - '0';
+    if(algorithm_id==2)
+        cout << ALGORITHMS[algorithm_id] <<algorithms[algorithm_index].second <<endl;
+    else
+        cout << ALGORITHMS[algorithm_id] << endl;
+}
+
+void printProcesses()
+{
+    cout << "Process    ";
+    for (int i = 0; i < process_count; i++)
+        cout << "|  " << getProcessName(processes[i]) << "  ";
+    cout << "|\n";
+}
+void printArrivalTime()
+{
+    cout << "Arrival    ";
+    for (int i = 0; i < process_count; i++)
+        printf("|%3d  ",getArrivalTime(processes[i]));
+    cout<<"|\n";
+}
+void printServiceTime()
+{
+    cout << "Service    |";
+    for (int i = 0; i < process_count; i++)
+        printf("%3d  |",getServiceTime(processes[i]));
+    cout << " Mean|\n";
+}
+void printFinishTime()
+{
+    cout << "Finish     ";
+    for (int i = 0; i < process_count; i++)
+        printf("|%3d  ",finishTime[i]);
+    cout << "|-----|\n";
+}
+void printTurnAroundTime()
+{
+    cout << "Turnaround |";
+    int sum = 0;
+    for (int i = 0; i < process_count; i++)
+    {
+        printf("%3d  |",turnAroundTime[i]);
+        sum += turnAroundTime[i];
+    }
+    if((1.0 * sum / turnAroundTime.size())>=10)
+		printf("%2.2f|\n",(1.0 * sum / turnAroundTime.size()));
+    else
+	 	printf(" %2.2f|\n",(1.0 * sum / turnAroundTime.size()));
+}
+
+void printNormTurn()
+{
+    cout << "NormTurn   |";
+    float sum = 0;
+    for (int i = 0; i < process_count; i++)
+    {
+        if( normTurn[i]>=10 )
+            printf("%2.2f|",normTurn[i]);
+        else
+            printf(" %2.2f|",normTurn[i]);
+        sum += normTurn[i];
+    }
+
+    if( (1.0 * sum / normTurn.size()) >=10 )
+        printf("%2.2f|\n",(1.0 * sum / normTurn.size()));
+	else
+        printf(" %2.2f|\n",(1.0 * sum / normTurn.size()));
+}
+
+
+
+
+
+
 //future scope ke liye 
 void printStats(int algorithm_index){
-
+    printAlgorithm(algorithm_index);
+    printProcesses();
+    printArrivalTime();
+    printServiceTime();
+    printFinishTime();
+    printTurnAroundTime();
+    printNormTurn();
 }
 
 
