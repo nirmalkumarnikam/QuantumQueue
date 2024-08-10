@@ -82,13 +82,13 @@ void firstComeFirstServe()
 }
 void roundRobin(int originalQuantum)
 {
-    queue<pair<int,int>>q;
+    queue<pair<int,int>>q;  //basically ready queue
     int j=0;
     if(getArrivalTime(processes[j])==0){
         q.push(make_pair(j,getServiceTime(processes[j])));
         j++;
     }
-    int currentQuantum = originalQuantum;
+    int currentQuantum = originalQuantum; //time quantum 
     for(int time =0;time<last_instant;time++){
         if(!q.empty()){
             int processIndex = q.front().first;
@@ -98,22 +98,22 @@ void roundRobin(int originalQuantum)
             int serviceTime = getServiceTime(processes[processIndex]);
             currentQuantum--;
             timeline[time][processIndex]='*';
-            while(j<process_count && getArrivalTime(processes[j])==time+1){
+            while(j<process_count && getArrivalTime(processes[j])==time+1){ //if new process comes add it to que
                 q.push(make_pair(j,getServiceTime(processes[j])));
                 j++;
             }
 
-            if(currentQuantum==0 && remainingServiceTime==0){
-                finishTime[processIndex]=time+1;
-                turnAroundTime[processIndex] = (finishTime[processIndex] - arrivalTime);
-                normTurn[processIndex] = (turnAroundTime[processIndex] * 1.0 / serviceTime);
-                currentQuantum=originalQuantum;
-                q.pop();
-            }else if(currentQuantum==0 && remainingServiceTime!=0){
+            if(currentQuantum==0 && remainingServiceTime==0){	//if process is completed and quantum is complete
+                finishTime[processIndex]=time+1;		//note the finish time	
+                turnAroundTime[processIndex] = (finishTime[processIndex] - arrivalTime);	//note the turnaround time
+                normTurn[processIndex] = (turnAroundTime[processIndex] * 1.0 / serviceTime);	////note the normalized turnaround time
+                currentQuantum=originalQuantum;	//reset time quantum
+                q.pop();	//remove Process
+            }else if(currentQuantum==0 && remainingServiceTime!=0){ //process not finish but TQ finish
                 q.pop();
                 q.push(make_pair(processIndex,remainingServiceTime));
                 currentQuantum=originalQuantum;
-            }else if(currentQuantum!=0 && remainingServiceTime==0){
+            }else if(currentQuantum!=0 && remainingServiceTime==0){	//process finish TQ remain
                 finishTime[processIndex]=time+1;
                 turnAroundTime[processIndex] = (finishTime[processIndex] - arrivalTime);
                 normTurn[processIndex] = (turnAroundTime[processIndex] * 1.0 / serviceTime);
